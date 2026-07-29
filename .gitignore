@@ -1,3 +1,5 @@
 .env
 __pycache__
 database.md
+/venv
+*.db
