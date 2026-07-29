@@ -1,8 +1,10 @@
 import os
 
-from fastapi import APIRouter, HTTPException, Header, status, Depends
+from fastapi import APIRouter, HTTPException, Header, status
 from pydantic import BaseModel
+# pyrefly: ignore [missing-import]
 import bcrypt
+# pyrefly: ignore [missing-import]
 import jwt
 import datetime
 
@@ -77,11 +79,13 @@ def login(user: UsuarioLogin):
         # checkpw requiere que tanto la contraseña ingresada como el hash de la DB sean bytes
         if not bcrypt.checkpw(user.password.encode('utf-8'), db_password_hash.encode('utf-8')):
             raise HTTPException(status_code=401, detail="Contraseña incorrecta")
+        
+        expiracion = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
 
         payload = {
             "id": user_id,
             "email": user_email,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=1) 
+            "exp": expiracion
         }
 
         access_token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)

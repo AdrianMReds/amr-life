@@ -1,6 +1,7 @@
 # app/core/database.py
 import os
 from contextlib import contextmanager
+# pyrefly: ignore [missing-import]
 from psycopg_pool import ConnectionPool
 
 from dotenv import load_dotenv
